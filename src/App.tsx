@@ -4,10 +4,11 @@ import { useTheme } from "./themes";
 import { Route, Routes } from "react-router";
 import { Header } from "components/header";
 import { useChainOptions, WalletProvider } from "@terra-money/wallet-provider";
-import { Transaction, TransactionsProvider } from "libs/transactions";
+import { CompletedTransaction, TransactionsProvider } from "libs/transactions";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { useCallback } from "react";
+import { CompletedTransactionSnackbar } from "components/snackbar/CompletedTransactionSnackbar";
 
 const queryClient = new QueryClient();
 
@@ -17,8 +18,10 @@ const Main = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const onCompleted = useCallback(
-    (transaction: Transaction) => {
-      enqueueSnackbar(`Completed ${transaction.txHash}`);
+    (transaction: CompletedTransaction) => {
+      enqueueSnackbar(
+        <CompletedTransactionSnackbar transaction={transaction} />
+      );
     },
     [enqueueSnackbar]
   );

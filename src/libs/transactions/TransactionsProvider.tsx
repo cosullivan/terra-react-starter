@@ -9,7 +9,12 @@ import { LocalStorageTxStore } from "./storage/LocalStorageTxStore";
 import { createTxStoreMiddleware } from "./storage";
 import { completedSubject, cancelledSubject, failedSubject } from "./rx";
 import { useLCDClient } from "@terra-money/wallet-provider";
-import { Transaction } from "./types";
+import {
+  CompletedTransaction,
+  FailedTransaction,
+  PendingTransaction,
+  TransactionStatus,
+} from "./types";
 
 const storage = new LocalStorageTxStore("__tx_store");
 
@@ -40,9 +45,9 @@ const useTransactionsContext = (): [TxState, TxDispatch] => {
 };
 
 interface TransactionsProviderProps extends UIElementProps {
-  onCompleted?: (transaction: Transaction) => void;
-  onCancelled?: (transaction: Transaction) => void;
-  onFailed?: (transaction: Transaction) => void;
+  onCompleted?: (transaction: CompletedTransaction) => void;
+  onCancelled?: (transaction: PendingTransaction) => void;
+  onFailed?: (transaction: FailedTransaction) => void;
 }
 
 const TransactionsProvider = (props: TransactionsProviderProps) => {
@@ -70,15 +75,21 @@ const TransactionsProvider = (props: TransactionsProviderProps) => {
 
   useEffect(() => {
     const completed = completedSubject.subscribe((transaction) => {
-      onCompleted && onCompleted(transaction);
+      if (onCompleted && transaction.status === TransactionStatus.Completed) {
+        onCompleted(transaction);
+      }
     });
 
     const cancelled = cancelledSubject.subscribe((transaction) => {
-      onCancelled && onCancelled(transaction);
+      if (onCancelled && transaction.status === TransactionStatus.Pending) {
+        onCancelled(transaction);
+      }
     });
 
     const failed = failedSubject.subscribe((transaction) => {
-      onFailed && onFailed(transaction);
+      if (onFailed && transaction.status === TransactionStatus.Failed) {
+        onFailed(transaction);
+      }
     });
 
     return () => {

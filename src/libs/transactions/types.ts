@@ -16,16 +16,16 @@ type TransactionBase = {
   payload: TransactionPayload;
 };
 
-type PendingTransaction = TransactionBase & {
+export type PendingTransaction = TransactionBase & {
   status: TransactionStatus.Pending;
 };
 
-type CompletedTransaction = TransactionBase & {
+export type CompletedTransaction = TransactionBase & {
   status: TransactionStatus.Completed;
   logs: TxLog[];
 };
 
-type FailedTransaction = TransactionBase & {
+export type FailedTransaction = TransactionBase & {
   status: TransactionStatus.Failed;
   error: Error;
 };
