@@ -3,6 +3,7 @@ import { QUERY_KEY, useCountQuery } from "queries";
 import { Container } from "components/primitives/container";
 import { useIncrementTx, useResetTx } from "tx";
 import { useQueryClient } from "react-query";
+import { Button } from "@mui/material";
 import styles from "./Home.module.sass";
 
 const Home = () => {
@@ -25,8 +26,9 @@ const Home = () => {
       )}
       {connectedWallet && (
         <Container>
-          <button
+          <Button
             className={styles.button}
+            variant="contained"
             disabled={reset.loading || increment.loading}
             onClick={async () => {
               await incrementTx({ wallet: connectedWallet });
@@ -34,9 +36,10 @@ const Home = () => {
             }}
           >
             Increment
-          </button>
-          <button
+          </Button>
+          <Button
             className={styles.button}
+            variant="contained"
             disabled={reset.loading || increment.loading}
             onClick={async () => {
               await resetTx({ wallet: connectedWallet, count: 0 });
@@ -44,7 +47,7 @@ const Home = () => {
             }}
           >
             Reset
-          </button>
+          </Button>
         </Container>
       )}
     </div>
