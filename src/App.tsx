@@ -8,7 +8,7 @@ import { CompletedTransaction, TransactionsProvider } from "libs/transactions";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { useCallback } from "react";
-import { CompletedTransactionSnackbar } from "components/snackbar/CompletedTransactionSnackbar";
+import { CompletedTransactionSnackbar } from "components/snackbar";
 
 const queryClient = new QueryClient();
 
