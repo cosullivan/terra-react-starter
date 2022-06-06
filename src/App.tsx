@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { useCallback } from "react";
 import { CompletedTransactionSnackbar } from "components/snackbar";
+import { NetworkGuard } from "components/network-guard";
 
 const queryClient = new QueryClient();
 
@@ -49,11 +50,13 @@ const App = () => {
         {...chainOptions}
         connectorOpts={{ bridge: "https://walletconnect.terra.dev/" }}
       >
-        <QueryClientProvider client={queryClient}>
-          <SnackbarProvider>
-            <Main />
-          </SnackbarProvider>
-        </QueryClientProvider>
+        <NetworkGuard>
+          <QueryClientProvider client={queryClient}>
+            <SnackbarProvider>
+              <Main />
+            </SnackbarProvider>
+          </QueryClientProvider>
+        </NetworkGuard>
       </WalletProvider>
     )
   );
