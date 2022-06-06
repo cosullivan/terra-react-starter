@@ -4,31 +4,47 @@ import { useTheme } from "./themes";
 import { Route, Routes } from "react-router";
 import { Header } from "components/header";
 import { useChainOptions, WalletProvider } from "@terra-money/wallet-provider";
-import { CompletedTransaction, TransactionsProvider } from "libs/transactions";
+import {
+  CompletedTransaction,
+  FailedTransaction,
+  TransactionsProvider,
+} from "libs/transactions";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { useCallback } from "react";
 import { CompletedTransactionSnackbar } from "components/snackbar";
 import { NetworkGuard } from "components/network-guard";
+import { useRefetchQueries } from "queries";
+import { TX_KEY } from "tx";
 
 const queryClient = new QueryClient();
 
 const Main = () => {
   const [theme] = useTheme();
 
+  const refetch = useRefetchQueries();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const onCompleted = useCallback(
     (transaction: CompletedTransaction) => {
+      refetch(transaction.payload["txKey"] as TX_KEY);
       enqueueSnackbar(
         <CompletedTransactionSnackbar transaction={transaction} />
       );
     },
-    [enqueueSnackbar]
+    [refetch, enqueueSnackbar]
+  );
+
+  const onFailed = useCallback(
+    (transaction: FailedTransaction) => {
+      refetch(transaction.payload["txKey"] as TX_KEY);
+    },
+    [refetch]
   );
 
   return (
-    <TransactionsProvider onCompleted={onCompleted}>
+    <TransactionsProvider onCompleted={onCompleted} onFailed={onFailed}>
       <main className={styles.root} data-theme={theme}>
         <Header />
         <section className={styles.content}>

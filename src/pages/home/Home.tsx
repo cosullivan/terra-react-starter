@@ -1,15 +1,12 @@
 import { useConnectedWallet } from "@terra-money/wallet-provider";
-import { QUERY_KEY, useCountQuery } from "queries";
+import { useCountQuery } from "queries";
 import { Container } from "components/primitives/container";
 import { useIncrementTx, useResetTx } from "tx";
-import { useQueryClient } from "react-query";
 import { Button } from "@mui/material";
 import styles from "./Home.module.sass";
 
 const Home = () => {
   const connectedWallet = useConnectedWallet();
-
-  const queryClient = useQueryClient();
 
   const [reset, resetTx] = useResetTx();
 
@@ -32,7 +29,6 @@ const Home = () => {
             disabled={reset.loading || increment.loading}
             onClick={async () => {
               await incrementTx({ wallet: connectedWallet });
-              queryClient.invalidateQueries(QUERY_KEY.COUNT);
             }}
           >
             Increment
@@ -43,7 +39,6 @@ const Home = () => {
             disabled={reset.loading || increment.loading}
             onClick={async () => {
               await resetTx({ wallet: connectedWallet, count: 0 });
-              queryClient.invalidateQueries(QUERY_KEY.COUNT);
             }}
           >
             Reset
