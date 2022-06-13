@@ -16,34 +16,36 @@ const Home = () => {
 
   return (
     <div className={styles.root}>
-      {count !== undefined && (
-        <div>
-          <h1>{`Count: ${count}`}</h1>
-        </div>
-      )}
       {connectedWallet && (
-        <Container>
-          <Button
-            className={styles.button}
-            variant="contained"
-            disabled={reset.loading || increment.loading}
-            onClick={async () => {
-              await incrementTx({ wallet: connectedWallet });
-            }}
-          >
-            Increment
-          </Button>
-          <Button
-            className={styles.button}
-            variant="contained"
-            disabled={reset.loading || increment.loading}
-            onClick={async () => {
-              await resetTx({ wallet: connectedWallet, count: 0 });
-            }}
-          >
-            Reset
-          </Button>
-        </Container>
+        <>
+          {count !== undefined && (
+            <div>
+              <h1>{`Count: ${count}`}</h1>
+            </div>
+          )}
+          <Container>
+            <Button
+              className={styles.button}
+              variant="contained"
+              disabled={reset.loading || increment.loading}
+              onClick={async () => {
+                await incrementTx({ wallet: connectedWallet });
+              }}
+            >
+              Increment
+            </Button>
+            <Button
+              className={styles.button}
+              variant="contained"
+              disabled={reset.loading || increment.loading}
+              onClick={async () => {
+                await resetTx({ wallet: connectedWallet, count: 0 });
+              }}
+            >
+              Reset
+            </Button>
+          </Container>
+        </>
       )}
     </div>
   );

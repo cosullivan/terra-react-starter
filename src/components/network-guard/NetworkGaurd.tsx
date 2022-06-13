@@ -1,12 +1,12 @@
-import { useWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
 import { UIElementProps } from "components/UIElementProps";
 
 export const NetworkGuard = (props: UIElementProps) => {
   const { children } = props;
 
-  const { network } = useWallet();
+  const connectedWallet = useConnectedWallet();
 
-  if (network.name !== "testnet") {
+  if (connectedWallet && connectedWallet.network.name !== "testnet") {
     return <div>Wrong Network, please connect to the Testnet.</div>;
   }
 
